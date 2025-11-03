@@ -7,9 +7,14 @@ When we set the economy to be shared in Stardew Valley, whenever someone sells a
 ## dependency（此工具的依賴）
 - VNC  
   (Recommend/推薦VNC) [TightVNC](https://www.tightvnc.com/)
+- Python 3  
+  (Development version/開發時使用版本) [Python 3.13.8](https://www.python.org/downloads/release/python-3138/)
 
 ## Getting start(讓我們開始吧)
 ### Windows
+Please start the Stardew Valley game first, otherwise this tool will not work.  
+
+請先開啟星露谷物語的遊戲本體否則此工具將無法運作
 ```cmd
 git clone https://github.com/Zhang7391/Stardew-Valley-OK-button-clicker.git
 cd Stardew-Valley-OK-button-clicker
