@@ -1,0 +1,6 @@
+# python3 -m pip install -r requirements.txt
+
+opencv-python   # 對應 import cv2
+numpy           # 對應 import numpy
+vncdotool       # 對應 from vncdotool import api
+psutil
