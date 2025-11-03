@@ -18,6 +18,9 @@ class StardewValleyTool():
     # Store the found window
     hwnd = []
 
+    def __init__(self):
+        pass 
+
     def foreach_window(self, testhwnd, lParam):
         if self.user32.IsWindowVisible(testhwnd):
             length = self.user32.GetWindowTextLengthW(testhwnd)
@@ -28,9 +31,37 @@ class StardewValleyTool():
                 self.hwnd.append(testhwnd)
                 return False  # Stop enumeration when found
         return True
+    
+    # Simulate mouse movement and clicking function
+    offset = 100
+    def click(x, y):
+        # Move to a nearby position (random offset of a few pixels)
+        start_x = x + random.randint(-offset, offset)
+        start_y = y + random.randint(-offset, offset)
+        self.user32.SetCursorPos(start_x, start_y)
+        time.sleep(0.1)
 
-    def __init__(self):
-        pass 
+        # Smoothly move to the target
+        steps = max(abs(x - start_x), abs(y - start_y), 10)
+        dx = (x - start_x) / steps
+        dy = (y - start_y) / steps
+        delay = 0.01  # Delay per step
+
+        for i in range(steps):
+            self.user32.SetCursorPos(int(start_x + dx*i), int(start_y + dy*i))
+            time.sleep(delay)
+
+        self.user32.SetCursorPos(x, y)
+        time.sleep(0.05)
+
+        # Double click
+        for _ in range(2):
+            self.user32.mouse_event(self.MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
+            time.sleep(0.3)
+            self.user32.mouse_event(self.MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
+            time.sleep(0.3)
+            
+        self.user32.SetCursorPos(10, 10)
     
     def run(self):
         # Define the callback function prototype
@@ -42,38 +73,6 @@ class StardewValleyTool():
         else:
             self.hwnd = self.hwnd[0]
             self.SetForegroundWindow(self.hwnd)
-
-        # Simulate mouse movement and clicking function
-        offset = 100
-        def click(x, y):
-            # Move to a nearby position (random offset of a few pixels)
-            start_x = x + random.randint(-offset, offset)
-            start_y = y + random.randint(-offset, offset)
-            self.user32.SetCursorPos(start_x, start_y)
-            time.sleep(0.1)
-
-            # Smoothly move to the target
-            steps = max(abs(x - start_x), abs(y - start_y), 10)
-            dx = (x - start_x) / steps
-            dy = (y - start_y) / steps
-            delay = 0.01  # Delay per step
-
-            for i in range(steps):
-                self.user32.SetCursorPos(int(start_x + dx*i), int(start_y + dy*i))
-                time.sleep(delay)
-
-            self.user32.SetCursorPos(x, y)
-            time.sleep(0.05)
-
-            # Double click
-            for _ in range(2):
-                self.user32.mouse_event(self.MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
-                time.sleep(0.3)
-                self.user32.mouse_event(self.MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
-                time.sleep(0.3)
-                
-            self.user32.SetCursorPos(10, 10)
-
 
         # Load the target image
         template = cv2.imread("ok.png", cv2.IMREAD_COLOR)
@@ -119,7 +118,7 @@ class StardewValleyTool():
                     # Calculate the center of the match
                     cx = x + tw // 2
                     cy = y + th // 2
-                    click(cx, cy)  # Use Windows API to click
+                    self.click(cx, cy)  # Use Windows API to click
                     print(f"Found button! Scale {scale:.2f}, Click position ({cx},{cy})")
                     found = True
                     break

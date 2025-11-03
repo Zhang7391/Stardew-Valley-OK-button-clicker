@@ -1,2 +1,5 @@
 *.cmd
+*.exe
+*.spec
+
 vnc_frame.png
